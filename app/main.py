@@ -4,9 +4,12 @@ Main application entry point for LifeFlow.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routes import transactions
+from app.config import settings
+
 # Initialize FastAPI app
 app = FastAPI(
-    title="LifeFlow API",
+    title=settings.APP_NAME,
     description="Backend API for LifeFlow application",
     version="1.0.0"
 )
@@ -20,10 +23,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include routers
+app.include_router(transactions.router)
+
 @app.get("/")
 async def root():
     """Root endpoint to verify API is running."""
-    return {"message": "Welcome to LifeFlow API"}
+    return {
+        "app_name": settings.APP_NAME,
+        "status": "running",
+        "api_version": "1.0.0"
+    }
 
 if __name__ == "__main__":
     import uvicorn
