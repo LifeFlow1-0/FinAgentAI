@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes import transactions
+from app.api.v1.router import router as api_v1_router
 from app.config import settings
 
 # Initialize FastAPI app
@@ -25,6 +26,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(transactions.router)
+app.include_router(api_v1_router)
 
 @app.get("/")
 async def root():
