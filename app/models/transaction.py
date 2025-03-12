@@ -4,10 +4,8 @@ Transaction model for the database.
 
 import enum
 from datetime import datetime
-from typing import Optional
 
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, DateTime, Float, Integer, String
 
 from app.database import Base
 
