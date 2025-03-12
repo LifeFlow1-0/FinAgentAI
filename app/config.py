@@ -26,8 +26,8 @@ class Settings(BaseSettings):
     API_V1_PREFIX: str = "/api/v1"
 
     # Plaid Settings
-    PLAID_CLIENT_ID: str
-    PLAID_SECRET: str
+    PLAID_CLIENT_ID: str = "test_client_id"  # Default for testing
+    PLAID_SECRET: str = "test_secret"  # Default for testing
     PLAID_ENV: PlaidEnv = PlaidEnv.SANDBOX
     PLAID_REDIRECT_URI: str = "http://localhost:8000/api/v1/plaid/oauth-redirect"
 
