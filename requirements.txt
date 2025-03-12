@@ -10,7 +10,7 @@ httpx==0.26.0
 pytest==7.4.3
 pytest-asyncio==0.23.2
 prometheus-client==0.17.1
-grafana-client==1.5.0
+grafana-client==4.3.2
 alpaca-trade-api==1.6.3
 plaid-python==29.1.0
 cryptography==42.0.5
