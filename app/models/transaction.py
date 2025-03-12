@@ -2,8 +2,8 @@
 Transaction model for the database.
 """
 
-from datetime import datetime
 import enum
+from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String
