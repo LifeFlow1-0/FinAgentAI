@@ -2,6 +2,7 @@
 Transaction model for the database.
 """
 
+import enum
 from datetime import datetime
 from typing import Optional
 
@@ -12,6 +13,7 @@ from app.database import Base
 
 
 class TransactionType(str, enum.Enum):
+    """Enumeration of transaction types."""
     INCOME = "income"
     EXPENSE = "expense"
     INVESTMENT = "investment"
