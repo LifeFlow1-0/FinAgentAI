@@ -1,11 +1,13 @@
 """
 Transaction model for the database.
 """
+
 from datetime import datetime
 from sqlalchemy import Column, Integer, Float, String, DateTime, Enum
 import enum
 
 from app.database import Base
+
 
 class TransactionType(str, enum.Enum):
     INCOME = "income"
@@ -13,8 +15,10 @@ class TransactionType(str, enum.Enum):
     INVESTMENT = "investment"
     TRANSFER = "transfer"
 
+
 class Transaction(Base):
     """Transaction model for storing financial transactions."""
+
     __tablename__ = "transactions"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -24,4 +28,4 @@ class Transaction(Base):
     description = Column(String, nullable=True)
     date = Column(DateTime, default=datetime.utcnow)
     created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
