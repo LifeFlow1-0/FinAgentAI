@@ -31,9 +31,7 @@ class Settings(BaseSettings):
     PLAID_ENV: PlaidEnv = PlaidEnv.SANDBOX
     PLAID_REDIRECT_URI: str = "http://localhost:8000/api/v1/plaid/oauth-redirect"
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = {"env_file": ".env", "case_sensitive": True}
 
 
 # Global Settings Instance
