@@ -11,13 +11,20 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.plaid import PlaidAccount, PlaidItem
-from app.schemas.plaid import (CreateLinkTokenRequest, ExchangeTokenRequest,
-                               ExchangeTokenResponse, LinkTokenResponse,
-                               TransactionResponse)
+from app.schemas.plaid import (
+    CreateLinkTokenRequest,
+    ExchangeTokenRequest,
+    ExchangeTokenResponse,
+    LinkTokenResponse,
+    TransactionResponse,
+)
 from app.utils.plaid_client import PlaidError, create_link_token
 from app.utils.plaid_client import exchange_public_token as exchange_token
-from app.utils.plaid_client import (get_plaid_client, get_transactions,
-                                    handle_plaid_error)
+from app.utils.plaid_client import (
+    get_plaid_client,
+    get_transactions,
+    handle_plaid_error,
+)
 
 router = APIRouter(prefix="/plaid", tags=["plaid"])
 
