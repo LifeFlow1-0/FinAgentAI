@@ -1,4 +1,5 @@
 # Use Python 3.11 slim image as base
+# This image is built and pushed to Docker Hub via GitHub Actions
 FROM python:3.11-slim
 
 # Set working directory
