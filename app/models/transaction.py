@@ -14,6 +14,7 @@ from app.database import Base
 
 class TransactionType(str, enum.Enum):
     """Enumeration of transaction types."""
+
     INCOME = "income"
     EXPENSE = "expense"
     INVESTMENT = "investment"
