@@ -2,9 +2,10 @@
 Pydantic models for Plaid API.
 """
 
-from typing import Dict, List, Optional, Literal
 from datetime import datetime
-from pydantic import BaseModel, Field, ConfigDict
+from typing import Dict, List, Literal, Optional
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class LinkTokenResponse(BaseModel):

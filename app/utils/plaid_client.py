@@ -2,21 +2,23 @@
 Plaid API client utility.
 """
 
-from typing import Optional
 from datetime import datetime, timedelta
-from plaid.api import plaid_api
-from plaid.model.transactions_get_request import TransactionsGetRequest
-from plaid.model.transactions_get_request_options import TransactionsGetRequestOptions
-from plaid.configuration import Configuration
-from plaid.api_client import ApiClient
-from plaid.model.products import Products
-from plaid.model.country_code import CountryCode
-from plaid.model.link_token_create_request import LinkTokenCreateRequest
-from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
-from plaid.model.item_public_token_exchange_request import (
-    ItemPublicTokenExchangeRequest,
-)
+from typing import Optional
+
 from fastapi import HTTPException
+from plaid.api import plaid_api
+from plaid.api_client import ApiClient
+from plaid.configuration import Configuration
+from plaid.model.country_code import CountryCode
+from plaid.model.item_public_token_exchange_request import \
+    ItemPublicTokenExchangeRequest
+from plaid.model.link_token_create_request import LinkTokenCreateRequest
+from plaid.model.link_token_create_request_user import \
+    LinkTokenCreateRequestUser
+from plaid.model.products import Products
+from plaid.model.transactions_get_request import TransactionsGetRequest
+from plaid.model.transactions_get_request_options import \
+    TransactionsGetRequestOptions
 
 from app.config import settings
 

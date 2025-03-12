@@ -5,9 +5,9 @@ Main application entry point for LifeFlow.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routes import transactions
 from app.api.v1.router import router as api_v1_router
 from app.config import settings
+from app.routes import transactions
 
 # Initialize FastAPI app
 app = FastAPI(

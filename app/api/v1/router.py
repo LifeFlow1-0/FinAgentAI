@@ -3,6 +3,7 @@ Main API router.
 """
 
 from fastapi import APIRouter
+
 from app.api.v1 import plaid
 
 router = APIRouter(prefix="/api/v1")

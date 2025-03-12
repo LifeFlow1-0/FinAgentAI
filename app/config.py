@@ -2,9 +2,10 @@
 Configuration settings for the LifeFlow application.
 """
 
-from pydantic_settings import BaseSettings
-from pathlib import Path
 from enum import Enum
+from pathlib import Path
+
+from pydantic_settings import BaseSettings
 
 
 class PlaidEnv(str, Enum):

@@ -2,9 +2,10 @@
 Transaction model for the database.
 """
 
-from datetime import datetime
-from sqlalchemy import Column, Integer, Float, String, DateTime, Enum
 import enum
+from datetime import datetime
+
+from sqlalchemy import Column, DateTime, Enum, Float, Integer, String
 
 from app.database import Base
 
