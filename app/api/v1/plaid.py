@@ -2,8 +2,8 @@
 Plaid API routes.
 """
 
-from datetime import datetime, timedelta
-from typing import Dict, Optional
+from datetime import datetime, timedelta, date
+from typing import Dict, Optional, List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.exc import SQLAlchemyError
