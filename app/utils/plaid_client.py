@@ -40,7 +40,7 @@ def get_plaid_client() -> plaid_api.PlaidApi:
     """
     try:
         configuration = Configuration(
-            host=f"https://{settings.PLAID_ENV}.plaid.com",
+            host=f"https://{settings.PLAID_ENV.value}.plaid.com",
             api_key={
                 "clientId": settings.PLAID_CLIENT_ID,
                 "secret": settings.PLAID_SECRET,
