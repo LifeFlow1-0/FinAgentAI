@@ -1,0 +1,48 @@
+feature:
+  name: Transaction Creation
+  description: Allow users to create financial transactions in the system
+
+  user_story:
+    as_a: user
+    i_want: to create a new transaction
+    so_that: I can track my financial activity
+
+  acceptance_criteria:
+    scenario_1:
+      name: Successful Transaction Creation
+      given: I am an authenticated user
+      when:
+        action: I submit a transaction with valid data
+        data:
+          amount: 100.00
+          currency: USD
+          type: expense
+          category: groceries
+      then:
+        - Create the transaction in the database
+        - Return a 201 Created status
+        - Return the created transaction with an ID
+        - Set created_at and updated_at timestamps
+
+    scenario_2:
+      name: Invalid Transaction Data
+      given: I am an authenticated user
+      when:
+        action: I submit a transaction with invalid data
+        data:
+          - negative amount
+          - invalid currency
+      then:
+        - Return a 422 status
+        - Provide clear error messages
+        - Not create the transaction
+
+  technical_requirements:
+    - POST /api/v1/transactions endpoint
+    - Transaction model with required fields
+    - Input validation
+    - Error handling
+
+  out_of_scope:
+    - Transaction categorization
+    - Receipt upload

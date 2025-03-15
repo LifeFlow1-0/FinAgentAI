@@ -7,6 +7,8 @@ from alembic import context
 
 # Import your models here
 from app.models.transaction import Transaction
+from app.models.plaid import PlaidItem, PlaidAccount
+from app.models.user import User
 from app.database import Base
 from app.config import settings
 
@@ -41,7 +43,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = settings.DATABASE_URL
+    url = f"sqlite:///{settings.DATABASE_PATH}"
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -61,7 +63,7 @@ def run_migrations_online() -> None:
 
     """
     configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = settings.DATABASE_URL
+    configuration["sqlalchemy.url"] = f"sqlite:///{settings.DATABASE_PATH}"
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",

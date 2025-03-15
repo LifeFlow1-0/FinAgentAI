@@ -24,6 +24,7 @@ class PlaidItem(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     accounts = relationship("PlaidAccount", back_populates="item")
+    transactions = relationship("Transaction", back_populates="plaid_item")
 
 
 class PlaidAccount(Base):
@@ -43,3 +44,4 @@ class PlaidAccount(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     item = relationship("PlaidItem", back_populates="accounts")
+    transactions = relationship("Transaction", back_populates="plaid_account")
