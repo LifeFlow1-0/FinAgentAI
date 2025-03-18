@@ -1,16 +1,19 @@
 from logging.config import fileConfig
-
+import os
+import sys
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
 
-# Import your models here
+# Add the parent directory to sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app.database import Base
+from app.models.user import User
 from app.models.transaction import Transaction
 from app.models.plaid import PlaidItem, PlaidAccount
-from app.models.user import User
-from app.database import Base
-from app.config import settings
+from app.models.personality import PersonalityProfile
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -43,7 +46,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = f"sqlite:///{settings.DATABASE_PATH}"
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -62,10 +65,8 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = f"sqlite:///{settings.DATABASE_PATH}"
     connectable = engine_from_config(
-        configuration,
+        config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )

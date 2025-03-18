@@ -1,199 +1,149 @@
-# LifeFlow
+# LifeFlow Monorepo
 
-A FastAPI-based financial transaction management system with Plaid integration.
-
-## System Requirements
-
-- Python 3.9+
-- SQLite 3
-- pip3
+This repository contains both the backend and mobile frontend for the LifeFlow application.
 
 ## Project Structure
 
 ```
-LifeFlow/
-├── app/
-│   ├── api/
-│   │   └── v1/           # API version 1 endpoints
-│   ├── models/           # SQLAlchemy models
-│   ├── schemas/          # Pydantic schemas
-│   ├── routes/           # Route handlers
-│   ├── core/            # Core functionality
-│   └── database.py      # Database configuration
-├── tests/               # Test suite
-├── alembic/            # Database migrations
-└── requirements.txt    # Project dependencies
+lifeflow/
+├── backend/           # FastAPI backend
+│   ├── app/           # FastAPI application code
+│   ├── alembic/       # Database migrations
+│   ├── tests/         # Backend tests
+│   └── requirements.txt
+├── mobile/            # React Native frontend
+│   ├── app/           # React Native components
+│   ├── __tests__/     # Frontend tests
+│   └── package.json
+└── README.md
 ```
 
-## Setup Instructions
+## Prerequisites
 
-1. **Create and activate a virtual environment**:
+- Python 3.9+
+- Node.js 14+
+- npm or yarn
+- React Native development environment
 
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+## Backend Setup
+
+1. Install dependencies:
+
+   ```
+   npm run backend:install
    ```
 
-2. **Install dependencies**:
+   or manually:
 
-   ```bash
-   pip3 install -r requirements.txt
+   ```
+   cd backend
+   pip install -r requirements.txt
    ```
 
-3. **Environment Configuration**:
-   Create a `.env` file in the project root:
+2. Run database migrations:
 
-   ```env
-   # Database
-   DATABASE_PATH=./lifeflow.db
-
-   # Plaid API
-   PLAID_CLIENT_ID=your_client_id
-   PLAID_SECRET=your_secret
-   PLAID_ENV=sandbox  # or development/production
-   PLAID_REDIRECT_URI=http://localhost:3000/oauth-redirect
-
-   # Security
-   SECRET_KEY=your_secret_key
-   ALGORITHM=HS256
-   ACCESS_TOKEN_EXPIRE_MINUTES=30
+   ```
+   cd backend
+   alembic upgrade head
    ```
 
-4. **Initialize Database**:
+3. Start the development server:
 
-   ```bash
-   # Create database tables
-   python3 -m app.init_db
+   ```
+   npm run backend:dev
    ```
 
-5. **Run Development Server**:
-   ```bash
+   or manually:
+
+   ```
+   cd backend
    uvicorn app.main:app --reload
    ```
 
-## Development Workflow
+4. The API will be available at http://localhost:8000
 
-1. **Running Tests**:
+## Mobile Setup
 
-   ```bash
-   pytest -v                  # Run all tests
-   pytest -v tests/test_*.py  # Run specific test file
-   pytest -v -k "test_name"   # Run specific test
+1. Install dependencies:
+
+   ```
+   npm run mobile:install
    ```
 
-2. **API Documentation**:
+   or manually:
 
-   - Swagger UI: http://localhost:8000/docs
-   - ReDoc: http://localhost:8000/redoc
-
-3. **Database Management**:
-
-   ```bash
-   # Create new migration
-   alembic revision --autogenerate -m "description"
-
-   # Apply migrations
-   alembic upgrade head
-
-   # Rollback migration
-   alembic downgrade -1
+   ```
+   cd mobile
+   npm install
    ```
 
-## Deployment Steps
+2. Start the React Native development server:
 
-1. **Production Environment Setup**:
-
-   ```bash
-   # Install production dependencies
-   pip3 install -r requirements.txt
-
-   # Set production environment variables
-   export DATABASE_PATH=/path/to/prod/db.sqlite
-   export PLAID_ENV=production
-   export PLAID_CLIENT_ID=prod_client_id
-   export PLAID_SECRET=prod_secret
+   ```
+   npm run mobile:start
    ```
 
-2. **Database Setup**:
+   or manually:
 
-   ```bash
-   # Apply all migrations
-   alembic upgrade head
+   ```
+   cd mobile
+   npm run start
    ```
 
-3. **Running in Production**:
-   ```bash
-   # Using Gunicorn (recommended for production)
-   gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker
+3. Run on iOS:
+
+   ```
+   npm run mobile:ios
    ```
 
-## Security Considerations
+   or manually:
 
-1. **API Authentication**:
-
-   - All endpoints require JWT authentication
-   - Tokens expire after 30 minutes
-   - Use secure headers in production
-
-2. **Database Security**:
-
-   - Use proper file permissions for SQLite database
-   - Regular backups recommended
-   - Consider using PostgreSQL for production
-
-3. **Plaid Integration**:
-   - Store Plaid secrets securely
-   - Use environment-specific API keys
-   - Implement proper error handling
-
-## Monitoring and Maintenance
-
-1. **Logging**:
-
-   - Application logs in `/var/log/lifeflow/`
-   - Use structured logging format
-   - Monitor for errors and exceptions
-
-2. **Backups**:
-
-   ```bash
-   # Daily database backup
-   sqlite3 $DATABASE_PATH ".backup '/path/to/backup/lifeflow_$(date +%Y%m%d).db'"
+   ```
+   cd mobile
+   npm run ios
    ```
 
-3. **Health Checks**:
-   - Monitor `/health` endpoint
-   - Set up alerts for system metrics
-   - Regular security updates
-
-## Common Issues and Solutions
-
-1. **Database Initialization**:
-   If tables are missing:
-
-   ```bash
-   python3 -m app.init_db
+4. Run on Android:
+   ```
+   npm run mobile:android
+   ```
+   or manually:
+   ```
+   cd mobile
+   npm run android
    ```
 
-2. **Plaid Connection Issues**:
+## Running Tests
 
-   - Verify API keys and environment
-   - Check Plaid status page
-   - Review error logs
+### Backend Tests
 
-3. **Performance Optimization**:
-   - Index heavily queried fields
-   - Implement caching where appropriate
-   - Monitor query performance
+```
+npm run backend:test
+```
 
-## Contributing
+or manually:
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests
-5. Submit a pull request
+```
+cd backend
+pytest
+```
 
-## License
+### Mobile Tests
 
-[License Information]
+```
+npm run mobile:test
+```
+
+or manually:
+
+```
+cd mobile
+npm test
+```
+
+## API Documentation
+
+Once the backend server is running, you can access the API documentation at:
+
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc

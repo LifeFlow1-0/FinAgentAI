@@ -4,6 +4,7 @@ Configuration settings for the LifeFlow application.
 
 from enum import Enum
 from pathlib import Path
+from cryptography.fernet import Fernet
 
 from pydantic_settings import BaseSettings
 
@@ -20,10 +21,13 @@ class Settings(BaseSettings):
     DEBUG: bool = True
 
     # Database Settings
-    DATABASE_PATH: str = str(Path(__file__).parent.parent / "data" / "lifeflow.db")
+    DATABASE_PATH: str = str(Path(__file__).parent.parent / "lifeflow.db")
 
     # API Settings
     API_V1_PREFIX: str = "/api/v1"
+
+    # Security Settings
+    ENCRYPTION_KEY: str = Fernet.generate_key().decode()  # Default to a new key if not provided
 
     # Plaid Settings
     PLAID_CLIENT_ID: str = "test_client_id"  # Default for testing
@@ -31,7 +35,7 @@ class Settings(BaseSettings):
     PLAID_ENV: PlaidEnv = PlaidEnv.SANDBOX
     PLAID_REDIRECT_URI: str = "http://localhost:8000/api/v1/plaid/oauth-redirect"
 
-    model_config = {"env_file": ".env", "case_sensitive": True}
+    model_config = {"env_file": ".env", "case_sensitive": True, "extra": "allow"}
 
 
 # Global Settings Instance
