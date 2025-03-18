@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 *.so
 .Python
+env/
 build/
 develop-eggs/
 dist/
@@ -15,10 +16,25 @@ lib64/
 parts/
 sdist/
 var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+venv/
+
+# Databases
+*.sqlite
+
+# Cleanup scripts
+cleanup.sh
+
+# Feature workspaces
+features/personality-input/
+
+# VS Code
+.vscode/*
+
+# macOS
+.DS_Store
 
 # Virtual Environment
 venv/
@@ -60,16 +76,16 @@ backend/lifeflow.db-journal
 # Node/React Native
 node_modules/
 mobile/node_modules/
-mobile/.expo/
-mobile/dist/
-mobile/npm-debug.*
-mobile/*.jks
-mobile/*.p8
-mobile/*.p12
-mobile/*.key
-mobile/*.mobileprovision
-mobile/*.orig.*
-mobile/web-build/
+.expo/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
 
 # Backup files
 *.backup
