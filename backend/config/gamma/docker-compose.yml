@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: config/gamma/Dockerfile
+    ports:
+      - "8000:8000"
+      - "9090:9090"  # Prometheus metrics
+    environment:
+      - ENVIRONMENT=gamma
+    env_file:
+      - .env
+    volumes:
+      - prometheus_data:/tmp/prometheus-metrics
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+
+volumes:
+  prometheus_data: 

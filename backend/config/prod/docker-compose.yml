@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: config/prod/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+    env_file:
+      - .env
+    volumes:
+      - prometheus_data:/tmp/prometheus-metrics
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  prometheus_data: 

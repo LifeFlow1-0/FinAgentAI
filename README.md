@@ -8,9 +8,21 @@ This repository contains both the backend and mobile frontend for the LifeFlow a
 lifeflow/
 ├── backend/           # FastAPI backend
 │   ├── app/           # FastAPI application code
-│   ├── alembic/       # Database migrations
+│   ├── config/
+│   │   ├── dev/
+│   │   │   ├── Dockerfile
+│   │   │   ├── docker-compose.yml
+│   │   │   └── requirements.txt
+│   │   ├── gamma/
+│   │   │   ├── Dockerfile
+│   │   │   ├── docker-compose.yml
+│   │   │   └── requirements.txt
+│   │   └── prod/
+│   │       ├── Dockerfile
+│   │       ├── docker-compose.yml
+│   │       └── requirements.txt
 │   ├── tests/         # Backend tests
-│   └── requirements.txt
+│   └── requirements.txt  # Base requirements for all environments
 ├── mobile/            # React Native frontend
 │   ├── app/           # React Native components
 │   ├── __tests__/     # Frontend tests
@@ -25,29 +37,36 @@ lifeflow/
 - npm or yarn
 - React Native development environment
 
-## Backend Setup
+## Development Setup
 
-1. Install dependencies:
+### Backend Setup
 
-   ```
-   npm run backend:install
-   ```
+1. Create and activate a virtual environment:
 
-   or manually:
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+```
 
-   ```
-   cd backend
-   pip install -r requirements.txt
-   ```
+2. Install dependencies:
 
-2. Run database migrations:
+```bash
+# For development (includes testing and linting tools)
+pip install -r config/dev/requirements.txt
+
+# For production
+pip install -r config/prod/requirements.txt
+```
+
+3. Run database migrations:
 
    ```
    cd backend
    alembic upgrade head
    ```
 
-3. Start the development server:
+4. Start the development server:
 
    ```
    npm run backend:dev
@@ -60,7 +79,7 @@ lifeflow/
    uvicorn app.main:app --reload
    ```
 
-4. The API will be available at http://localhost:8000
+5. The API will be available at http://localhost:8000
 
 ## Mobile Setup
 

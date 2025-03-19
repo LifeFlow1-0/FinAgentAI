@@ -1,3 +1,8 @@
+# Environment variables
+.env
+backend/.env
+*/.env
+
 # Python
 __pycache__/
 *.py[cod]
@@ -40,7 +45,6 @@ features/personality-input/
 venv/
 env/
 ENV/
-.env
 .venv
 
 # IDE
@@ -48,7 +52,6 @@ ENV/
 .vscode/
 *.swp
 *.swo
-.DS_Store
 
 # Testing
 .coverage

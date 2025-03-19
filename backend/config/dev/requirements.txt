@@ -1,0 +1,15 @@
+# Include base requirements
+-r ../../requirements.txt
+
+# Development Tools
+flake8==7.0.0
+black==24.2.0
+isort==5.13.2
+
+# Testing
+pytest==7.4.3
+httpx==0.25.1
+
+# Additional development tools
+pytest-cov==4.1.0  # For test coverage reports
+watchdog==3.0.0    # For auto-reloading during development 

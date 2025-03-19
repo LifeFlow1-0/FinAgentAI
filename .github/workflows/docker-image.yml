@@ -20,17 +20,39 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
-          pip3 install black==24.2.0 isort==5.13.2
+          cd backend && pip3 install -r config/dev/requirements.txt
 
       - name: Check formatting with Black
-        run: black --check app
+        run: cd backend && black --check app
 
       - name: Check imports with isort
-        run: isort --check-only app
+        run: cd backend && isort --check-only app
 
-  build:
+  test:
     needs: lint
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          cd backend && pip3 install -r config/dev/requirements.txt
+
+      - name: Run tests
+        run: cd backend && pytest
+
+  build-and-push:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [gamma, prod]
     steps:
       - uses: actions/checkout@v3
 
@@ -46,7 +68,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: ./docker/Dockerfile
+          context: ./backend
+          file: ./backend/config/${{ matrix.environment }}/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lifeflow:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lifeflow:${{ matrix.environment }}
