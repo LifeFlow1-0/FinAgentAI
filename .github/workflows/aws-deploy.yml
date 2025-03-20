@@ -15,7 +15,19 @@ env:
   ECS_TASK_DEFINITION: lifeflow-task
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Validate environment
+        run: |
+          ENVIRONMENT=${{ github.ref == 'refs/heads/main' && 'prod' || 'gamma' }}
+          test -f backend/config/$ENVIRONMENT/Dockerfile || exit 1
+          test -f backend/config/$ENVIRONMENT/docker-compose.yml || exit 1
+
   deploy:
+    needs: validate
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref == 'refs/heads/main' && 'production' || 'gamma' }}
@@ -67,3 +79,15 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
+
+      - name: Health check
+        run: |
+          ENVIRONMENT=${{ github.ref == 'refs/heads/main' && 'prod' || 'gamma' }}
+          URL="https://$ENVIRONMENT.lifeflow.app/health"
+          for i in {1..30}; do
+            if curl -s -f $URL; then
+              exit 0
+            fi
+            sleep 10
+          done
+          exit 1
