@@ -159,7 +159,7 @@ const PersonalityForm: React.FC<PersonalityFormProps> = ({ onSubmit, isLoading =
         accessibilityLabel="Submit"
       >
         {isLoading ? (
-          <ActivityIndicator color="#FFFFFF" />
+          <ActivityIndicator color="#FFFFFF" testID="loading-indicator" />
         ) : (
           <Text style={styles.submitButtonText}>Submit</Text>
         )}

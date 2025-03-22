@@ -1,10 +1,20 @@
+/// <reference types="jest" />
+// @ts-nocheck - TODO: Fix TypeScript configuration for Jest tests
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import PersonalityForm from '../PersonalityForm';
+import { Alert } from 'react-native';
+import PersonalityForm from '../app/components/PersonalityForm';
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+jest.mock('react-native/Libraries/Alert/Alert', () => ({
+  alert: jest.fn(),
+}));
 
 describe('PersonalityForm', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('updates state correctly when user types input', () => {
     const { getByLabelText } = render(<PersonalityForm onSubmit={jest.fn()} />);
 
@@ -49,13 +59,6 @@ describe('PersonalityForm', () => {
   });
 
   test('resets state after successful submission', async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ status: 'success' }),
-      })
-    );
-
     const { getByText, getByLabelText } = render(<PersonalityForm onSubmit={jest.fn()} />);
 
     fireEvent.changeText(getByLabelText(/openness/i), 'a');
@@ -71,5 +74,57 @@ describe('PersonalityForm', () => {
       expect(getByLabelText(/learning style/i).props.value).toBe('');
       expect(getByLabelText(/activity intensity/i).props.value).toBe('');
     });
+  });
+  
+  // New test cases
+  
+  test('displays validation error when missing required fields', () => {
+    const { getByText } = render(<PersonalityForm onSubmit={jest.fn()} />);
+    
+    // Try to submit with empty fields
+    fireEvent.press(getByText(/submit/i));
+    
+    // Check if Alert was called with validation error message
+    expect(Alert.alert).toHaveBeenCalledWith(
+      'Validation Error',
+      'Please fill in all fields correctly'
+    );
+  });
+  
+  test('calls onSubmit with correct data when form is valid', () => {
+    const mockSubmit = jest.fn();
+    const { getByText, getByLabelText } = render(<PersonalityForm onSubmit={mockSubmit} />);
+    
+    // Fill all form fields
+    fireEvent.changeText(getByLabelText(/openness/i), 'a');
+    fireEvent.changeText(getByLabelText(/social energy/i), 'b');
+    fireEvent.changeText(getByLabelText(/learning style/i), 'c');
+    fireEvent.changeText(getByLabelText(/activity intensity/i), 'a');
+    
+    // Submit the form
+    fireEvent.press(getByText(/submit/i));
+    
+    // Verify onSubmit was called with correct data
+    expect(mockSubmit).toHaveBeenCalledWith({
+      openness: 'a',
+      social_energy: 'b',
+      learning_style: 'c',
+      activity_intensity: 'a'
+    });
+  });
+  
+  test('handles loading state properly during submission', () => {
+    const { getByLabelText, getByTestId } = render(
+      <PersonalityForm onSubmit={jest.fn()} isLoading={true} />
+    );
+    
+    // Check that inputs are disabled during loading
+    expect(getByLabelText(/openness/i).props.editable).toBe(false);
+    expect(getByLabelText(/social energy/i).props.editable).toBe(false);
+    expect(getByLabelText(/learning style/i).props.editable).toBe(false);
+    expect(getByLabelText(/activity intensity/i).props.editable).toBe(false);
+    
+    // Check that loading indicator is displayed
+    expect(getByTestId('loading-indicator')).toBeTruthy();
   });
 }); 
