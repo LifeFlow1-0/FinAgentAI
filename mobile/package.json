@@ -7,7 +7,13 @@
     "test": "jest",
     "start": "react-native start",
     "android": "react-native run-android",
-    "ios": "react-native run-ios"
+    "ios": "react-native run-ios",
+    "build": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle",
+    "serve": "node docker/tools/serve.js",
+    "docker:test": "./docker/tools/docker-run.sh dev test",
+    "docker:dev": "./docker/tools/docker-run.sh dev",
+    "docker:gamma": "./docker/tools/docker-run.sh gamma",
+    "docker:prod": "./docker/tools/docker-run.sh prod"
   },
   "dependencies": {
     "react-native": "^0.66.0",
