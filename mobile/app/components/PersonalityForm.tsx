@@ -31,6 +31,8 @@ const PersonalityForm: React.FC<PersonalityFormProps> = ({ onSubmit, isLoading =
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof PersonalityData, string>>>({});
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validateField = (name: keyof PersonalityData, value: string) => {
     if (!value) {
@@ -84,8 +86,17 @@ const PersonalityForm: React.FC<PersonalityFormProps> = ({ onSubmit, isLoading =
       return;
     }
 
-    onSubmit(formData);
-    resetForm(); // Reset form after successful submission
+    // Reset any previous submission state
+    setSubmitSuccess(false);
+    setSubmitError(null);
+
+    try {
+      onSubmit(formData);
+      setSubmitSuccess(true);
+      resetForm(); // Reset form after successful submission
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Unknown error');
+    }
   };
 
   // Check if any required field is empty
@@ -110,9 +121,10 @@ const PersonalityForm: React.FC<PersonalityFormProps> = ({ onSubmit, isLoading =
         autoCapitalize="none"
         editable={!isLoading}
         accessibilityLabel={label}
+        testID={`${name.replace('_', '-')}-input`}
       />
       {errors[name] ? (
-        <Text style={styles.errorText}>{errors[name]}</Text>
+        <Text style={styles.errorText} testID={`${name.replace('_', '-')}-error`}>{errors[name]}</Text>
       ) : null}
     </View>
   );
@@ -149,6 +161,19 @@ const PersonalityForm: React.FC<PersonalityFormProps> = ({ onSubmit, isLoading =
         'Enter a, b, or c'
       )}
 
+      {/* Success and error messages */}
+      {submitSuccess && (
+        <Text style={styles.successText} testID="success-message">
+          Personality data submitted successfully
+        </Text>
+      )}
+
+      {submitError && (
+        <Text style={styles.errorText} testID="error-message">
+          Error submitting personality data: {submitError}
+        </Text>
+      )}
+
       <TouchableOpacity
         style={[
           styles.submitButton,
@@ -157,6 +182,7 @@ const PersonalityForm: React.FC<PersonalityFormProps> = ({ onSubmit, isLoading =
         onPress={handleSubmit}
         disabled={isLoading || isFormIncomplete}
         accessibilityLabel="Submit"
+        testID="submit-button"
       >
         {isLoading ? (
           <ActivityIndicator color="#FFFFFF" testID="loading-indicator" />
@@ -222,6 +248,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+  },
+  successText: {
+    color: '#4CD964', // iOS success green
+    fontSize: 16,
+    fontWeight: '600',
+    marginVertical: 10,
+    textAlign: 'center',
   },
 });
 
