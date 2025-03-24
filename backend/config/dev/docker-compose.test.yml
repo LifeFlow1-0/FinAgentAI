@@ -1,0 +1,24 @@
+# Testing Docker Compose Configuration
+#
+# This file defines the Docker environment for running automated tests.
+# It uses an in-memory SQLite database to ensure test isolation.
+
+services:
+  api-test:
+    build:
+      context: ../..
+      dockerfile: config/dev/Dockerfile
+    volumes:
+      - ../../app:/app/app
+      - ../../tests:/app/tests
+      # Mount a temporary testing database path
+      - /tmp:/app/tmp
+    environment:
+      - ENVIRONMENT=test
+      - ENV_FILE=config/dev/.env.test
+      - DATABASE_PATH=/app/tmp/test.db
+      # This is a valid Fernet key for testing only - not for production use
+      - ENCRYPTION_KEY=49pGkgnt46ek-ibDeM1m607YSSPHSWtXURiJKQG7uCs=
+    env_file:
+      - .env.test
+    command: python -m unittest discover -s tests

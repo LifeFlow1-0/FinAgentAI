@@ -9,16 +9,18 @@ services:
       - "8000:8000"
     environment:
       - ENVIRONMENT=production
+      - ENV_FILE=config/prod/.env
     env_file:
       - .env
     volumes:
       - prometheus_data:/tmp/prometheus-metrics
+      - sqlite_data:/app/data
     deploy:
       replicas: 2
       restart_policy:
         condition: on-failure
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -36,4 +38,5 @@ services:
         condition: on-failure
 
 volumes:
-  prometheus_data: 
+  prometheus_data:
+  sqlite_data:

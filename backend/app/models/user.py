@@ -5,9 +5,11 @@ User model for the database.
 from datetime import datetime
 
 from sqlalchemy import Column, DateTime, Integer, String, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 from app.database import Base
+# Import the personality model here would create a circular import
+# Instead, we define the relationship without importing
 
 
 class User(Base):
@@ -29,4 +31,10 @@ class User(Base):
 
     # Relationships
     transactions = relationship("Transaction", back_populates="user")
-    personality_profile = relationship("PersonalityProfile", back_populates="user", uselist=False) 
+    # Using string reference to avoid circular imports
+    personality_profile = relationship(
+        "PersonalityProfile", 
+        back_populates="user", 
+        uselist=False,
+        cascade="all, delete-orphan"
+    ) 

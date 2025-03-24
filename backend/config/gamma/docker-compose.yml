@@ -7,13 +7,16 @@ services:
       dockerfile: config/gamma/Dockerfile
     ports:
       - "8000:8000"
-      - "9090:9090"  # Prometheus metrics
+      - "9090:9090" # Prometheus metrics
     environment:
       - ENVIRONMENT=gamma
+      - ENV_FILE=config/gamma/.env
     env_file:
       - .env
     volumes:
       - prometheus_data:/tmp/prometheus-metrics
+      # Mount the SQLite database file to persist data
+      - sqlite_data:/app/data
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2
 
   prometheus:
@@ -25,4 +28,5 @@ services:
       - prometheus_data:/prometheus
 
 volumes:
-  prometheus_data: 
+  prometheus_data:
+  sqlite_data: # Volume for persisting SQLite database 

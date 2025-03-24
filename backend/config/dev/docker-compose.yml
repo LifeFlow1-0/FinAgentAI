@@ -1,4 +1,7 @@
-version: "3.8"
+# Development Docker Compose Configuration
+#
+# This file defines the development Docker environment for LifeFlow.
+# It uses SQLite as the database engine and enables hot-reloading for development.
 
 services:
   api:
@@ -10,8 +13,11 @@ services:
     volumes:
       - ../../app:/app/app
       - ../../tests:/app/tests
+      # Mount the SQLite database file to persist data between container restarts
+      - ../../lifeflow.db:/app/lifeflow.db
     environment:
       - ENVIRONMENT=development
+      - ENV_FILE=config/dev/.env
     env_file:
       - .env
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload 
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

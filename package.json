@@ -12,5 +12,8 @@
     "mobile:test": "cd mobile && npm test",
     "mobile:ios": "cd mobile && npm run ios",
     "mobile:android": "cd mobile && npm run android"
+  },
+  "dependencies": {
+    "axios": "^1.8.4"
   }
 }
