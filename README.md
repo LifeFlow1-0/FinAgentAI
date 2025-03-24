@@ -1,6 +1,6 @@
 # LifeFlow
 
-LifeFlow is a personal financial management application.
+LifeFlow is a personal financial management application structured as a monorepo.
 
 ## Project Structure
 
@@ -11,9 +11,9 @@ LifeFlow is a personal financial management application.
 - **mobile/** - React Native mobile application
 - **scripts/** - Utility scripts for development and deployment
 
-## Development Setup
+## Development Strategy
 
-LifeFlow uses Docker for development to ensure consistency across environments.
+LifeFlow uses a **Docker-centric development approach**. All backend development and testing happens within containers to ensure consistency across environments and simplify onboarding.
 
 ### Prerequisites
 
@@ -21,7 +21,7 @@ LifeFlow uses Docker for development to ensure consistency across environments.
 - Node.js 16+ and npm
 - Python 3.11+ (for running local scripts)
 
-### Backend Setup
+### Backend Development Setup
 
 1. Set up development environment:
 
@@ -32,8 +32,14 @@ LifeFlow uses Docker for development to ensure consistency across environments.
    ```
 
 2. Start the development container:
+
    ```bash
    docker-compose up -d
+   ```
+
+3. Initialize the database:
+   ```bash
+   docker-compose exec api python -m app.init_db
    ```
 
 The API will be available at http://localhost:8000 with documentation at http://localhost:8000/docs.
@@ -52,20 +58,69 @@ The API will be available at http://localhost:8000 with documentation at http://
    npm run ios
    ```
 
-## Testing
+## Testing Strategy
 
-Run all tests with:
+LifeFlow uses multiple testing approaches to validate both functionality and the build process:
+
+### Automated Tests
+
+Run all automated tests with:
 
 ```bash
 ./scripts/run_tests.sh
 ```
 
-Or run specific tests:
+This script runs:
+
+1. Backend functional tests in a Docker container
+2. API connectivity tests
+3. Mobile app integration tests
+
+### Component-Specific Tests
+
+#### Backend Functional Tests
 
 ```bash
 cd backend/config/dev
 docker-compose -f docker-compose.test.yml up --build
 ```
+
+#### Configuration Tests
+
+```bash
+cd backend
+python -m pytest tests/test_config.py -v
+```
+
+#### API Connectivity Tests
+
+```bash
+cd scripts
+node test_backend_frontend.js
+```
+
+#### Mobile Integration Tests
+
+```bash
+cd scripts
+node test_mobile_integration.js
+```
+
+### Build Process Validation
+
+The Docker build process is automatically validated when running:
+
+```bash
+cd backend/config/dev
+docker-compose -f docker-compose.test.yml up --build
+```
+
+This test ensures:
+
+- Docker container builds successfully
+- Environment variables load correctly
+- Database initializes properly
+- Application can start and respond to requests
 
 ## Environment Configuration
 
@@ -77,3 +132,30 @@ LifeFlow uses environment-specific configuration files:
 - Testing: `backend/config/dev/.env.test`
 
 See `backend/config/README.md` for more details on environment setup.
+
+## Deployment
+
+### Development
+
+```bash
+cd backend/config/dev
+docker-compose up -d
+```
+
+### Gamma/Staging
+
+```bash
+cd backend/config/gamma
+cp .env.example .env
+python ../../scripts/generate_key.py --env-file=.env
+docker-compose up -d
+```
+
+### Production
+
+```bash
+cd backend/config/prod
+cp .env.example .env
+python ../../scripts/generate_key.py --env-file=.env
+docker-compose up -d
+```
