@@ -26,14 +26,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Create base class for models
 Base = declarative_base()
 
-# Import all models here to ensure they're discovered 
-# when Base.metadata.create_all() is called
-# This avoids circular import issues when importing individual models
-from app.models.user import User
-from app.models.transaction import Transaction
-from app.models.plaid import PlaidItem, PlaidAccount
-from app.models.personality import PersonalityProfile
-
 def get_db():
     """Get database session for dependency injection."""
     db = SessionLocal()
@@ -41,3 +33,18 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def _initialize_models():
+    """
+    Import all models to ensure they're discovered when Base.metadata.create_all() is called.
+    This function is called at the end of this module to avoid circular import issues.
+    DO NOT MOVE THESE IMPORTS TO THE TOP OF THIS FILE.
+    """
+    # pylint: disable=import-outside-toplevel,unused-import
+    from app.models.user import User
+    from app.models.transaction import Transaction
+    from app.models.plaid import PlaidItem, PlaidAccount
+    from app.models.personality import PersonalityProfile
+
+# Initialize models
+_initialize_models()

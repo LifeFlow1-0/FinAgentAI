@@ -8,7 +8,10 @@ LifeFlow is a personal financial management application structured as a monorepo
   - **app/** - Application code
   - **config/** - Environment-specific configuration
   - **tests/** - Unit and integration tests
-- **mobile/** - React Native mobile application
+- **LifeFlowMobile/** - React Native mobile application
+  - **app/** - Custom application components
+  - **ios/** - iOS platform code
+  - **android/** - Android platform code
 - **scripts/** - Utility scripts for development and deployment
 
 ## Development Strategy
@@ -18,8 +21,10 @@ LifeFlow uses a **Docker-centric development approach**. All backend development
 ### Prerequisites
 
 - Docker and Docker Compose
-- Node.js 16+ and npm
+- Node.js 18+ and npm
 - Python 3.11+ (for running local scripts)
+- Xcode 14+ (for iOS development)
+- Android Studio (for Android development)
 
 ### Backend Development Setup
 
@@ -49,12 +54,27 @@ The API will be available at http://localhost:8000 with documentation at http://
 1. Install dependencies:
 
    ```bash
-   cd mobile
+   cd LifeFlowMobile
    npm install
    ```
 
-2. Start the mobile app (with backend running):
+2. For iOS, install CocoaPods dependencies:
+
    ```bash
+   cd LifeFlowMobile/ios
+   pod install
+   ```
+
+3. Start the mobile app (with backend running):
+
+   ```bash
+   cd LifeFlowMobile
+   npm run start
+   ```
+
+4. In a separate terminal, launch the iOS app:
+   ```bash
+   cd LifeFlowMobile
    npm run ios
    ```
 
@@ -74,7 +94,7 @@ This script runs:
 
 1. Backend functional tests in a Docker container
 2. API connectivity tests
-3. Mobile app integration tests
+3. Mobile app unit tests
 
 ### Component-Specific Tests
 
@@ -99,11 +119,11 @@ cd scripts
 node test_backend_frontend.js
 ```
 
-#### Mobile Integration Tests
+#### Mobile Unit Tests
 
 ```bash
-cd scripts
-node test_mobile_integration.js
+cd LifeFlowMobile
+npm test
 ```
 
 ### Build Process Validation

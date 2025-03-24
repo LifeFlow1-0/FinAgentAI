@@ -6,7 +6,7 @@ import pytest
 from fastapi import status
 from sqlalchemy.orm import Session
 
-from app.models.personality import PersonalityProfile
+# Import models within test functions to avoid circular imports
 
 def test_create_personality_profile(client, test_user):
     """Test creating a personality profile."""
@@ -57,6 +57,9 @@ def test_create_personality_profile_invalid_user(client):
 
 def test_create_duplicate_personality_profile(client, test_user, db: Session):
     """Test creating a profile when one already exists."""
+    # Import here to avoid circular imports
+    from app.models.personality import PersonalityProfile
+    
     # Create initial profile
     profile = PersonalityProfile(user_id=test_user.id)
     profile.set_personality_data({
@@ -104,6 +107,9 @@ def test_create_personality_profile_invalid_data(client, test_user):
 
 def test_get_personality_profile(client, test_user, db: Session):
     """Test retrieving a personality profile."""
+    # Import here to avoid circular imports
+    from app.models.personality import PersonalityProfile
+    
     # Create profile
     profile = PersonalityProfile(user_id=test_user.id)
     profile.set_personality_data({
