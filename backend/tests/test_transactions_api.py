@@ -36,6 +36,7 @@ def test_create_transaction_api(client, test_transaction):
     data = response.json()
     assert data["amount"] == test_transaction["amount"]
     assert data["type"] == test_transaction["type"]
+    assert data["status"] == test_transaction["status"]
 
 
 def test_list_transactions_api(client):
@@ -69,7 +70,9 @@ def test_get_transaction_api(client, test_transaction):
     # Then retrieve it
     response = client.get(f"/api/v1/transactions/{transaction_id}")
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["id"] == transaction_id
+    data = response.json()
+    assert data["id"] == transaction_id
+    assert data["amount"] == test_transaction["amount"]
 
 
 def test_update_transaction_api(client, test_transaction):
@@ -99,13 +102,14 @@ def test_update_transaction_api(client, test_transaction):
     
     # Update the transaction
     update_data = dict(test_transaction)
-    update_data["description"] = "Updated transaction"
     update_data["amount"] = 150.0
+    update_data["description"] = "Updated transaction"
     
     response = client.put(f"/api/v1/transactions/{transaction_id}", json=update_data)
     assert response.status_code == status.HTTP_200_OK
-    assert response.json()["description"] == "Updated transaction"
-    assert response.json()["amount"] == 150.0
+    data = response.json()
+    assert data["amount"] == 150.0
+    assert data["description"] == "Updated transaction"
 
 
 def test_delete_transaction_api(client, test_transaction):
@@ -122,7 +126,7 @@ def test_delete_transaction_api(client, test_transaction):
     
     # Delete the transaction
     response = client.delete(f"/api/v1/transactions/{transaction_id}")
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_204_NO_CONTENT
     
     # Verify it's deleted
     get_response = client.get(f"/api/v1/transactions/{transaction_id}")

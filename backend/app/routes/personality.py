@@ -19,8 +19,8 @@ from app.schemas.personality import PersonalityProfileCreate, PersonalityProfile
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Update router prefix to include full path
-router = APIRouter(prefix="/api/v1/user-profile/personality", tags=["personality"])
+# Update router prefix to remove duplicate /api/v1
+router = APIRouter(prefix="/user-profile/personality", tags=["personality"])
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def create_personality_profile(

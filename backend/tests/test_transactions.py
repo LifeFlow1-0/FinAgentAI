@@ -127,7 +127,7 @@ def test_delete_transaction(client, test_user, test_plaid_account):
     created_transaction = create_response.json()
     
     response = client.delete(f"/api/v1/transactions/{created_transaction['id']}")
-    assert response.status_code == 200
+    assert response.status_code == 204
     
     get_response = client.get(f"/api/v1/transactions/{created_transaction['id']}")
     assert get_response.status_code == 404

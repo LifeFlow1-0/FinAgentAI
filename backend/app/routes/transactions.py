@@ -15,7 +15,7 @@ from app.models.plaid import PlaidItem, PlaidAccount
 from app.schemas.transaction import Transaction, TransactionCreate, TransactionUpdate
 from app.schemas.enums import TransactionTypeEnum, TransactionStatusEnum
 
-router = APIRouter(prefix="/api/v1/transactions", tags=["transactions"])
+router = APIRouter(prefix="/transactions", tags=["transactions"])
 
 
 @router.post("/", response_model=Transaction, status_code=status.HTTP_201_CREATED)
@@ -165,7 +165,7 @@ async def update_transaction(
         )
 
 
-@router.delete("/{transaction_id}", status_code=status.HTTP_200_OK)
+@router.delete("/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
     """Delete a specific transaction."""
     transaction = (
@@ -180,7 +180,7 @@ async def delete_transaction(transaction_id: int, db: Session = Depends(get_db))
     try:
         db.delete(transaction)
         db.commit()
-        return {"message": "Transaction deleted successfully"}
+        return None
     except SQLAlchemyError as e:
         db.rollback()
         raise HTTPException(

@@ -7,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import router as api_v1_router
 from app.config import settings
-from app.routes import transactions, personality
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -26,8 +25,6 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(transactions.router)
-app.include_router(personality.router)
 app.include_router(api_v1_router)
 
 
