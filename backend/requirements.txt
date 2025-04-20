@@ -1,18 +1,18 @@
 # FastAPI and Server
-fastapi==0.104.1
-uvicorn==0.24.0
+fastapi==0.109.2
+uvicorn==0.27.1
 
 # Database
-sqlalchemy==2.0.23
-alembic==1.12.1
+sqlalchemy==2.0.27
+alembic==1.13.1
 
 # Data Validation and Settings
-pydantic==2.4.2
-pydantic-settings==2.0.3
+pydantic==2.6.1
+pydantic-settings==2.1.0
 
 # Security and Environment
-cryptography==41.0.5
-python-dotenv==1.0.0
+cryptography==42.0.2
+python-dotenv==1.0.1
 
 # Plaid API
 plaid-python==18.1.0  # Adding this since it was missing and caused Docker issues 
