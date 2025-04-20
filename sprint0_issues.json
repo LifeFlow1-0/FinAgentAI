@@ -1,0 +1,52 @@
+[
+  {
+    "title": "Set up temporary onboarding session logic",
+    "body": "Create a backend session model for onboarding that generates a unique `session_id`, stores it with a TTL (e.g. 7 days), and associates it with user answers temporarily.\n\n**Acceptance Criteria:**\n- `POST /session` returns unique `session_id`\n- Session stored in SQLite with expiration timestamp\n- Included in all onboarding API requests via header or param\n\n**Points:** 2\n**Labels:** `backend`, `api`, `session`, `onboarding`\n**Tests:** Pytest: create, expire, fetch session",
+    "labels": [
+      "backend",
+      "api",
+      "session",
+      "onboarding"
+    ]
+  },
+  {
+    "title": "Create adaptive personality quiz API flow (FastAPI)",
+    "body": "Implement logic for question progression based on previous answers using adaptive branching from `adaptive question flow for each domain.pdf`.\n\n**Acceptance Criteria:**\n- `GET /personality/next-question?domain=openness&answer=a&session_id=xyz`\n- Returns next question or domain\n- Handles edge cases: unknown session, missing answer\n- Stores progress per session in DB\n\n**Points:** 2\n**Labels:** `backend`, `personality`, `adaptive`, `api`\n**Tests:** Pytest: path navigation, fallback logic",
+    "labels": [
+      "backend",
+      "personality",
+      "adaptive",
+      "api"
+    ]
+  },
+  {
+    "title": "Build adaptive onboarding UI with transitions (React Native)",
+    "body": "Implement the mobile-first onboarding screens for the 4 domains. Include icon, question text, 3-option answers, and visual progress bar.\n\n**Acceptance Criteria:**\n- Matches mockup from `mobile-onboarding-mockup.tsx`\n- Correct transitions between screens\n- Session stored in local state\n- Answers sent to backend\n\n**Points:** 2\n**Labels:** `frontend`, `react-native`, `onboarding`, `UI`\n**Tests:** Jest: renders, user flow with mocked backend",
+    "labels": [
+      "frontend",
+      "react-native",
+      "onboarding",
+      "UI"
+    ]
+  },
+  {
+    "title": "Add personality scoring logic + result endpoint",
+    "body": "Use `personality-scoring-system.js` logic to compute traits and preferences. Create `/personality/score` endpoint to store and return result.\n\n**Acceptance Criteria:**\n- Accepts `session_id` and answers\n- Returns profile with `traits`, `dominantTraits`, and `activityPreferences`\n- Stores to SQLite\n\n**Points:** 2\n**Labels:** `backend`, `personality`, `api`, `scoring`\n**Tests:** Pytest: scoring correctness, profile save",
+    "labels": [
+      "backend",
+      "personality",
+      "api",
+      "scoring"
+    ]
+  },
+  {
+    "title": "Link onboarding session data to user on signup",
+    "body": "On final signup, convert the session into a permanent user profile by storing the temp answers and traits under the `user_id`.\n\n**Acceptance Criteria:**\n- `POST /signup` with session_id, email, password\n- Creates user + links all stored onboarding data\n- Deletes session record after merge\n\n**Points:** 2\n**Labels:** `backend`, `auth`, `session`, `signup`\n**Tests:** Pytest: session merge \u2192 user profile created",
+    "labels": [
+      "backend",
+      "auth",
+      "session",
+      "signup"
+    ]
+  }
+]

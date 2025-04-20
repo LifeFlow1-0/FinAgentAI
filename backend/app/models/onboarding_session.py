@@ -1,4 +1,4 @@
-from app.db.base_class import Base
+from app.models.base import Base
 from sqlalchemy import Column, String, DateTime, JSON
 import uuid, datetime as dt
 

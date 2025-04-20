@@ -98,21 +98,20 @@ async def create_personality_profile(
         db.rollback()
         logger.error(f"Database error: {str(e)}")
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not create personality profile"
         )
+
 
 @router.get("/{user_id}", response_model=PersonalityProfileResponse)
 async def get_personality_profile(
     user_id: int,
     db: Session = Depends(get_db)
 ):
-    """Get a user's personality profile."""
-    profile = (
-        db.query(PersonalityProfile)
-        .filter(PersonalityProfile.user_id == user_id)
-        .first()
-    )
+    """Get a personality profile for a user."""
+    profile = db.query(PersonalityProfile).filter(
+        PersonalityProfile.user_id == user_id
+    ).first()
     
     if not profile:
         raise HTTPException(
@@ -123,7 +122,7 @@ async def get_personality_profile(
     return PersonalityProfileResponse(
         id=profile.id,
         user_id=profile.user_id,
+        **profile.get_personality_data(),
         created_at=profile.created_at,
-        updated_at=profile.updated_at,
-        **profile.get_personality_data()
+        updated_at=profile.updated_at
     ) 

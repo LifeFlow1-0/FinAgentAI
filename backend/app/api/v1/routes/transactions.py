@@ -112,51 +112,24 @@ async def update_transaction(
     db: Session = Depends(get_db)
 ):
     """Update a specific transaction."""
-    transaction = (
+    db_transaction = (
         db.query(TransactionModel).filter(TransactionModel.id == transaction_id).first()
     )
-    if not transaction:
+    if not db_transaction:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Transaction not found"
         )
 
-    # Validate foreign key references
-    user = db.query(User).filter(User.id == transaction_update.user_id).first()
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={"user_id": "User not found"}
-        )
-
-    plaid_item = db.query(PlaidItem).filter(PlaidItem.id == transaction_update.plaid_item_id).first()
-    if not plaid_item:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={"plaid_item_id": "Plaid item not found"}
-        )
-
-    plaid_account = db.query(PlaidAccount).filter(PlaidAccount.id == transaction_update.plaid_account_id).first()
-    if not plaid_account:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={"plaid_account_id": "Plaid account not found"}
-        )
-
-    # Validate currency code
-    valid_currencies = ["USD", "EUR", "GBP", "CAD", "AUD", "JPY"]
-    if transaction_update.currency not in valid_currencies:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={"currency": "Invalid currency code"}
-        )
+    # Update transaction fields
+    update_data = transaction_update.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(db_transaction, field, value)
 
     try:
-        for key, value in transaction_update.model_dump(exclude_unset=True).items():
-            setattr(transaction, key, value)
         db.commit()
-        db.refresh(transaction)
-        return Transaction.model_validate(transaction)
+        db.refresh(db_transaction)
+        return Transaction.model_validate(db_transaction)
     except SQLAlchemyError as e:
         db.rollback()
         raise HTTPException(
@@ -186,4 +159,4 @@ async def delete_transaction(transaction_id: int, db: Session = Depends(get_db))
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
-        )
+        ) 
