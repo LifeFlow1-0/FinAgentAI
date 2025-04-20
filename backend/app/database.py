@@ -45,6 +45,7 @@ def _initialize_models():
     from app.models.transaction import Transaction
     from app.models.plaid import PlaidItem, PlaidAccount
     from app.models.personality import PersonalityProfile
+    from app.models.onboarding_session import OnboardingSession
 
 # Initialize models
 _initialize_models()

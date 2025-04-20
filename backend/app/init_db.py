@@ -11,7 +11,7 @@ from alembic import command
 from alembic.config import Config
 from app.database import Base, engine, SessionLocal
 from app.models.user import User
-from app.core.config import settings
+from app.config import settings
 
 # Configure logging
 logging.basicConfig(

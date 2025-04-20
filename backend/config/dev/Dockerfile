@@ -26,6 +26,8 @@ RUN pip3 install --no-cache-dir -r config/dev/requirements.txt
 # Copy project files
 COPY app/ app/
 COPY tests/ tests/
+COPY alembic.ini .
+COPY alembic/ alembic/
 
 # Expose port
 EXPOSE 8000
